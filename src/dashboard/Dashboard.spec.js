@@ -7,10 +7,28 @@ import 'react-testing-library/cleanup-after-each';
 import Dashboard from './Dashboard';
 
 describe('Dashboard', () => {
-    it('should default to unlocked & open', () => {
+    it('defaults to unlocked & open', () => {
         const {getByText} = render(<Dashboard/>);
         expect(getByText(/unlocked/i));
         expect(getByText(/open/i));
+    });
 
+    it('cannot be closed or opened if it is locked', () => {
+        const {getByText} = render(<Dashboard/>);
+        
+        expect(getByText(/unlocked/i));
+        expect(getByText(/open/i));
+
+        fireEvent.click(getByText(/close gate/i));
+        expect(getByText(/closed/i));
+        expect(getByText(/unlocked/i));
+
+        fireEvent.click(getByText(/lock gate/i));
+        expect(getByText(/closed/i));
+        expect(getByText(/locked/i));
+
+        fireEvent.click(getByText(/open gate/i));
+        expect(getByText(/closed/i));
+        expect(getByText(/open gate/i));
     });
 });
